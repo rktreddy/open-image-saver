@@ -43,7 +43,7 @@ If you want to confirm the host permission isn't being abused, search the repo f
 - Add a "premium tier" gate on core functionality
 - Sync to the cloud
 - Add an account system
-- Get sold to a third party — see [SECURITY.md](#security) for why this matters
+- Get sold to a third party — see [SECURITY.md](SECURITY.md) for why this matters
 
 ## Verifying the build
 
@@ -71,9 +71,7 @@ Anything that compromises the trust positioning will be closed.
 
 ## Security
 
-If you find a vulnerability or anything sketchy, please open an issue (or, for sensitive disclosures, contact via the address on the GitHub profile). Do not include exploits in public issues; we'll set up a private channel.
-
-If you're ever offered the extension for sale: **don't sell**. That's exactly how the previous one got hijacked.
+See [SECURITY.md](SECURITY.md) for the full policy: how to report a vulnerability privately, what's in and out of scope, response targets, and the maintainer commitments (including the "this project will not be sold" pledge — the previous extension was hijacked exactly because its maintainer sold it).
 
 ## License
 
