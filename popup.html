@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Open Image Saver</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --fg: #1a1a1a;
+        --muted: #6a6a6a;
+        --line: #e5e5e5;
+        --accent: #0a66c2;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root { --fg: #f1f1f1; --muted: #9a9a9a; --line: #2a2a2a; }
+      }
+      html, body { margin: 0; }
+      body {
+        font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        color: var(--fg);
+        width: 280px;
+        padding: 14px 16px 12px;
+      }
+      h1 {
+        font-size: 13px;
+        font-weight: 600;
+        margin: 0 0 10px;
+        letter-spacing: 0.01em;
+      }
+      .row { margin: 10px 0; }
+      .row label.block {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+      }
+      .quality {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+      }
+      .quality input { display: none; }
+      .quality label {
+        text-align: center;
+        padding: 6px 0;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .quality input:checked + label {
+        border-color: var(--accent);
+        color: var(--accent);
+        font-weight: 600;
+      }
+      select {
+        width: 100%;
+        padding: 4px 6px;
+        font: inherit;
+        color: inherit;
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+      }
+      .footer {
+        margin-top: 14px;
+        padding-top: 10px;
+        border-top: 1px solid var(--line);
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .footer a { color: inherit; }
+    </style>
+  </head>
+  <body>
+    <h1>Open Image Saver</h1>
+
+    <div class="row">
+      <label class="toggle">
+        <input type="checkbox" id="saveAs" />
+        <span>Ask where to save each image</span>
+      </label>
+    </div>
+
+    <div class="row">
+      <label class="block" for="q-80">JPG / WebP quality</label>
+      <div class="quality">
+        <input type="radio" name="quality" id="q-60" value="60" />
+        <input type="radio" name="quality" id="q-80" value="80" />
+        <input type="radio" name="quality" id="q-100" value="100" />
+        <label for="q-60">60%</label>
+        <label for="q-80">80%</label>
+        <label for="q-100">100%</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="block" for="defaultFormat">Default format</label>
+      <select id="defaultFormat">
+        <option value="png">PNG</option>
+        <option value="jpg">JPG</option>
+        <option value="webp">WebP</option>
+      </select>
+    </div>
+
+    <div class="footer">
+      No telemetry. No analytics. <a href="https://github.com/" id="repo-link" target="_blank" rel="noreferrer">View source</a>.
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

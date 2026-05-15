@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Open Image Saver",
+  "version": "1.0.0",
+  "description": "Save any image as PNG, JPG, or WebP. Open source, no telemetry, no affiliate links. Audit the code on GitHub.",
+  "permissions": ["contextMenus", "downloads", "offscreen", "storage"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js" },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
