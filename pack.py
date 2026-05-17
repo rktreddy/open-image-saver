@@ -52,7 +52,7 @@ def build_zip(root: Path, out_dir: Path, version: str) -> Path:
             info.external_attr = 0
             zf.writestr(info, (root / rel).read_bytes())
             # CPython's _open_to_write() overwrites a falsy external_attr with
-            # 0o600<<18 (Unix permission bits). Re-zero via the ZipInfo already
+            # 0o600<<16 (Unix permission bits). Re-zero via the ZipInfo already
             # appended to zf.filelist — mutating `info` after writestr has no
             # effect, since writestr's internal copy is what landed in filelist.
             zf.filelist[-1].external_attr = 0
