@@ -12,13 +12,13 @@ import sys
 import zipfile
 from pathlib import Path
 
-# Exact runtime file set shipped to the Chrome Web Store. Explicit, not derived
-# from manifest.json: offscreen.html is loaded at runtime via
-# chrome.offscreen.createDocument and never appears in the manifest.
 # Pinned Zip entry metadata. Any fixed values work; these maximize portability.
 FIXED_DATE_TIME = (1980, 1, 1, 0, 0, 0)  # minimum the DOS date field allows
 CREATE_SYSTEM_MSDOS = 0  # MS-DOS: carries no Unix permission bits
 
+# Exact runtime file set shipped to the Chrome Web Store. Explicit, not derived
+# from manifest.json: offscreen.html is loaded at runtime via
+# chrome.offscreen.createDocument and never appears in the manifest.
 ALLOWLIST = [
     "manifest.json",
     "background.js",
