@@ -53,14 +53,22 @@ The previous "Save Image as Type" extension was hijacked because its maintainer 
 
 ## Verifying a release
 
-Reproducible builds are planned for v1.0. Once that lands, each release will publish the SHA-256 of the distributed `.zip`. To verify:
+Each tagged release publishes the SHA-256 of the distributed `.zip`, and the
+build is reproducible:
 
-1. Clone at the release tag.
-2. Run the build script.
-3. Compare your local `dist/*.zip` SHA-256 against the hash in the release notes.
-4. Optionally: download the `.crx` from the Web Store, unpack the `.zip` inside, and compare against both.
+1. Clone the repository and `git checkout` the release tag.
+2. Run `python3 pack.py`.
+3. Compare the printed `sha256:` value against the hash in the release notes.
 
-A mismatch is a security finding — please report it via the channels above.
+A match proves the release artifact was built from exactly the tagged source.
+The build performs no minification or bundling — the files in the package are
+byte-identical to the files in the repository — so the archive is simply a
+faithful container of the source you can already read.
+
+This verifies the uploaded `.zip`. It does not verify the installed `.crx`:
+the Chrome Web Store repacks and re-signs every upload, so the served `.crx` is
+never byte-identical to the `.zip`. A mismatch between a release's published
+hash and a from-source rebuild is a security finding — please report it.
 
 ## Credit
 

@@ -22,14 +22,19 @@ If a change might compromise any of the above, surface it explicitly before writ
 
 ## Build, Run, Test
 
-There is **no build step, no package manager, no test runner** at this stage. Files are loaded directly as an unpacked extension.
+The extension loads directly as an unpacked extension — there is no bundler and
+no transpilation. The "build" is packaging only.
 
 - **Load:** `chrome://extensions` → enable Developer mode → "Load unpacked" → pick the repo root.
 - **Reload after edits:** click the circular reload arrow on the extension's card in `chrome://extensions`. The context menu only re-registers on `chrome.runtime.onInstalled`, which fires on reload from this UI.
 - **Service worker logs:** on the extension's card, click the "service worker" link → opens DevTools for `background.js`. The worker terminates after ~30s idle; clicking the link wakes it.
 - **Offscreen document logs:** the offscreen document doesn't show up in `chrome://extensions`. Inspect it via `chrome://inspect/#other` once it's been created.
+- **Build the package:** `python3 pack.py` → writes `dist/open-image-saver-v{version}.zip` and prints its SHA-256. Pure Python stdlib, no dependencies.
+- **Run the tests:** `python3 -m unittest test_pack -v`. Uses stdlib `unittest`; no test-runner dependency.
 
-A build/test pipeline arrives in Week 4 (reproducible build + SHA-256 publish). Don't add tooling earlier than that without a reason — the trust story is easier to verify when the source tree is the build.
+The package is intentionally produced without minification so the shipped files
+stay byte-identical to the repo files — "audit the code" must remain literally
+true. See `pack.py` and `docs/superpowers/specs/2026-05-16-build-pipeline-design.md`.
 
 ## Architecture
 
