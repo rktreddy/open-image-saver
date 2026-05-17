@@ -93,12 +93,13 @@ class BuildZipTest(unittest.TestCase):
 
 
 class Sha256Test(unittest.TestCase):
-    def test_hash_is_stable_for_same_bytes(self):
+    def test_hash_is_stable_across_two_builds(self):
         with TemporaryDirectory() as d:
             root = Path(d)
             make_fixture(root)
-            zip_path = pack.build_zip(root, root / "dist", "1.2.3")
-            self.assertEqual(pack.sha256(zip_path), pack.sha256(zip_path))
+            z1 = pack.build_zip(root, root / "out1", "1.2.3")
+            z2 = pack.build_zip(root, root / "out2", "1.2.3")
+            self.assertEqual(pack.sha256(z1), pack.sha256(z2))
 
     def test_hash_is_64_hex_chars(self):
         with TemporaryDirectory() as d:
@@ -147,6 +148,14 @@ class MainTest(unittest.TestCase):
             code, output = self._run(["pack.py", "--expect-version", "9.9.9"], root)
             self.assertEqual(code, 1)
             self.assertIn("9.9.9", output)
+
+    def test_expect_version_missing_value_exits_two(self):
+        with TemporaryDirectory() as d:
+            root = Path(d)
+            make_fixture(root, version="1.2.3")
+            code, output = self._run(["pack.py", "--expect-version"], root)
+            self.assertEqual(code, 2)
+            self.assertIn("--expect-version", output)
 
 
 if __name__ == "__main__":
