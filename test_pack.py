@@ -52,5 +52,45 @@ class FindMissingTest(unittest.TestCase):
             self.assertEqual(pack.find_missing(root), ["icons/48.png"])
 
 
+import zipfile
+
+
+class BuildZipTest(unittest.TestCase):
+    def test_zip_contains_exactly_allowlist(self):
+        with TemporaryDirectory() as d:
+            root = Path(d)
+            make_fixture(root)
+            zip_path = pack.build_zip(root, root / "dist", "1.2.3")
+            with zipfile.ZipFile(zip_path) as zf:
+                self.assertEqual(sorted(zf.namelist()), sorted(pack.ALLOWLIST))
+
+    def test_zip_filename_includes_version(self):
+        with TemporaryDirectory() as d:
+            root = Path(d)
+            make_fixture(root)
+            zip_path = pack.build_zip(root, root / "dist", "4.5.6")
+            self.assertEqual(zip_path.name, "open-image-saver-v4.5.6.zip")
+
+    def test_entries_have_pinned_metadata(self):
+        with TemporaryDirectory() as d:
+            root = Path(d)
+            make_fixture(root)
+            zip_path = pack.build_zip(root, root / "dist", "1.2.3")
+            with zipfile.ZipFile(zip_path) as zf:
+                for info in zf.infolist():
+                    self.assertEqual(info.date_time, (1980, 1, 1, 0, 0, 0))
+                    self.assertEqual(info.create_system, 0)
+                    self.assertEqual(info.external_attr, 0)
+                    self.assertEqual(info.compress_type, zipfile.ZIP_STORED)
+
+    def test_build_is_deterministic(self):
+        with TemporaryDirectory() as d:
+            root = Path(d)
+            make_fixture(root)
+            z1 = pack.build_zip(root, root / "out1", "1.2.3")
+            z2 = pack.build_zip(root, root / "out2", "1.2.3")
+            self.assertEqual(z1.read_bytes(), z2.read_bytes())
+
+
 if __name__ == "__main__":
     unittest.main()
