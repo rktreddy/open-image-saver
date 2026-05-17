@@ -1,5 +1,6 @@
 import json
 import unittest
+import zipfile
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -52,9 +53,6 @@ class FindMissingTest(unittest.TestCase):
             self.assertEqual(pack.find_missing(root), ["icons/48.png"])
 
 
-import zipfile
-
-
 class BuildZipTest(unittest.TestCase):
     def test_zip_contains_exactly_allowlist(self):
         with TemporaryDirectory() as d:
@@ -78,7 +76,7 @@ class BuildZipTest(unittest.TestCase):
             zip_path = pack.build_zip(root, root / "dist", "1.2.3")
             with zipfile.ZipFile(zip_path) as zf:
                 for info in zf.infolist():
-                    self.assertEqual(info.date_time, (1980, 1, 1, 0, 0, 0))
+                    self.assertEqual(info.date_time, pack.FIXED_DATE_TIME)
                     self.assertEqual(info.create_system, 0)
                     self.assertEqual(info.external_attr, 0)
                     self.assertEqual(info.compress_type, zipfile.ZIP_STORED)
