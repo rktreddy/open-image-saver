@@ -1,0 +1,30 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+
+      - name: Build extension package
+        run: python3 pack.py --expect-version "${GITHUB_REF_NAME#v}"
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          zip="dist/open-image-saver-v${version}.zip"
+          sha="$(sha256sum "$zip" | awk '{print $1}')"
+          gh release create "$GITHUB_REF_NAME" "$zip" \
+            --title "v${version}" \
+            --notes "$(printf 'SHA-256 of `%s`:\n\n```\n%s\n```\n\nVerify: clone at this tag, run `python3 pack.py`, and compare the printed sha256.' "open-image-saver-v${version}.zip" "$sha")"
