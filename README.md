@@ -47,14 +47,22 @@ If you want to confirm the host permission isn't being abused, search the repo f
 
 ## Verifying the build
 
-_Reproducible build pipeline lands in v1.0 release. When it does:_
+Every tagged release publishes the SHA-256 of the distributed `.zip`. The build
+is reproducible — anyone can regenerate the exact same archive from source:
 
-1. Clone at the tagged release commit.
-2. Run the build script.
-3. Compare the resulting `dist/` SHA-256 against the hash published in the GitHub release notes.
-4. Compare both against the SHA-256 of the `.zip` Chrome Web Store distributes.
+1. `git clone https://github.com/rktreddy/open-image-saver && cd open-image-saver`
+2. `git checkout <tag>` — the release tag you want to verify (e.g. `v1.0.0`)
+3. `python3 pack.py`
+4. Compare the hex digest on the printed `sha256:` line against the hash in that release's notes (the notes show the raw hex).
 
-All three must match. If they don't, something is wrong — open an issue.
+A match proves the released artifact was built from exactly this source, with no
+hidden step. Verifying needs only `git` and `python3` — no other tools.
+
+Note: this verifies the **uploaded `.zip`**, not the installed extension. The
+Chrome Web Store repacks every upload into its own signed `.crx`, so the file
+Chrome serves is never byte-identical to the `.zip` — that is true of every
+extension on the store. What is verifiable, and what this guarantees, is that
+the release artifact is faithfully reproducible from the public source.
 
 ## AVIF
 
