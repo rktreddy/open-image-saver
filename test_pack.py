@@ -1,3 +1,5 @@
+import contextlib
+import io
 import json
 import unittest
 import zipfile
@@ -88,6 +90,63 @@ class BuildZipTest(unittest.TestCase):
             z1 = pack.build_zip(root, root / "out1", "1.2.3")
             z2 = pack.build_zip(root, root / "out2", "1.2.3")
             self.assertEqual(z1.read_bytes(), z2.read_bytes())
+
+
+class Sha256Test(unittest.TestCase):
+    def test_hash_is_stable_for_same_bytes(self):
+        with TemporaryDirectory() as d:
+            root = Path(d)
+            make_fixture(root)
+            zip_path = pack.build_zip(root, root / "dist", "1.2.3")
+            self.assertEqual(pack.sha256(zip_path), pack.sha256(zip_path))
+
+    def test_hash_is_64_hex_chars(self):
+        with TemporaryDirectory() as d:
+            root = Path(d)
+            make_fixture(root)
+            zip_path = pack.build_zip(root, root / "dist", "1.2.3")
+            digest = pack.sha256(zip_path)
+            self.assertEqual(len(digest), 64)
+            self.assertTrue(all(c in "0123456789abcdef" for c in digest))
+
+
+class MainTest(unittest.TestCase):
+    def _run(self, argv, root):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
+            code = pack.main(argv, root=root)
+        return code, out.getvalue()
+
+    def test_successful_build_exits_zero_and_writes_zip(self):
+        with TemporaryDirectory() as d:
+            root = Path(d)
+            make_fixture(root, version="1.2.3")
+            code, output = self._run(["pack.py"], root)
+            self.assertEqual(code, 0)
+            self.assertIn("sha256:", output)
+            self.assertTrue((root / "dist" / "open-image-saver-v1.2.3.zip").is_file())
+
+    def test_missing_files_exit_one(self):
+        with TemporaryDirectory() as d:
+            root = Path(d)  # empty: nothing on the allowlist exists
+            code, output = self._run(["pack.py"], root)
+            self.assertEqual(code, 1)
+            self.assertIn("missing", output)
+
+    def test_expect_version_match_exits_zero(self):
+        with TemporaryDirectory() as d:
+            root = Path(d)
+            make_fixture(root, version="1.2.3")
+            code, _ = self._run(["pack.py", "--expect-version", "1.2.3"], root)
+            self.assertEqual(code, 0)
+
+    def test_expect_version_mismatch_exits_one(self):
+        with TemporaryDirectory() as d:
+            root = Path(d)
+            make_fixture(root, version="1.2.3")
+            code, output = self._run(["pack.py", "--expect-version", "9.9.9"], root)
+            self.assertEqual(code, 1)
+            self.assertIn("9.9.9", output)
 
 
 if __name__ == "__main__":
