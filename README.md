@@ -77,6 +77,10 @@ Issues and PRs welcome. Two non-negotiable rules for contributors:
 
 Anything that compromises the trust positioning will be closed.
 
+## Privacy
+
+Open Image Saver collects nothing, sends nothing anywhere, and has no servers — no telemetry, no analytics, no account. The full [privacy policy](PRIVACY.md) explains exactly what data the extension touches (only the image you right-click) and what it never touches.
+
 ## Security
 
 See [SECURITY.md](SECURITY.md) for the full policy: how to report a vulnerability privately, what's in and out of scope, response targets, and the maintainer commitments (including the "this project will not be sold" pledge — the previous extension was hijacked exactly because its maintainer sold it).
