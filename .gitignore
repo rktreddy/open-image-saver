@@ -9,3 +9,4 @@ __pycache__/
 # Private maintainer notes — not for the public repo
 PROJECT.md
 tasks/
+docs/web-store-listing.md
