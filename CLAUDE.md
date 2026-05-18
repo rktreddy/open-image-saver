@@ -30,7 +30,7 @@ no transpilation. The "build" is packaging only.
 - **Service worker logs:** on the extension's card, click the "service worker" link → opens DevTools for `background.js`. The worker terminates after ~30s idle; clicking the link wakes it.
 - **Offscreen document logs:** the offscreen document doesn't show up in `chrome://extensions`. Inspect it via `chrome://inspect/#other` once it's been created.
 - **Build the package:** `python3 pack.py` → writes `dist/open-image-saver-v{version}.zip` and prints its SHA-256. Pure Python stdlib, no dependencies.
-- **Run the tests:** `python3 -m unittest test_pack -v`. Uses stdlib `unittest`; no test-runner dependency.
+- **Run the tests:** `python3 -B -m unittest test_pack -v`. Uses stdlib `unittest`; no test-runner dependency. The `-B` flag suppresses `__pycache__` — Chrome refuses to load an unpacked extension from a directory containing any `_`-prefixed entry, and the repo root *is* what you load during development.
 
 The package is intentionally produced without minification so the shipped files
 stay byte-identical to the repo files — "audit the code" must remain literally
