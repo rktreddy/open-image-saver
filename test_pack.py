@@ -29,7 +29,7 @@ def make_fixture(root: Path, version: str = "1.2.3") -> None:
     icons = root / "icons"
     icons.mkdir()
     for size in [16, 32, 48, 128]:
-        (icons / f"{size}.png").write_bytes(b"\x89PNG\r\n\x1a\n" + bytes([size]))
+        (icons / f"icon-{size}.png").write_bytes(b"\x89PNG\r\n\x1a\n" + bytes([size]))
 
 
 class ReadVersionTest(unittest.TestCase):
@@ -51,8 +51,8 @@ class FindMissingTest(unittest.TestCase):
         with TemporaryDirectory() as d:
             root = Path(d)
             make_fixture(root)
-            (root / "icons" / "48.png").unlink()
-            self.assertEqual(pack.find_missing(root), ["icons/48.png"])
+            (root / "icons" / "icon-48.png").unlink()
+            self.assertEqual(pack.find_missing(root), ["icons/icon-48.png"])
 
 
 class BuildZipTest(unittest.TestCase):

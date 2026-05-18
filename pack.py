@@ -26,10 +26,10 @@ ALLOWLIST = [
     "offscreen.js",
     "popup.html",
     "popup.js",
-    "icons/16.png",
-    "icons/32.png",
-    "icons/48.png",
-    "icons/128.png",
+    "icons/icon-16.png",
+    "icons/icon-32.png",
+    "icons/icon-48.png",
+    "icons/icon-128.png",
     "LICENSE",
 ]
 
